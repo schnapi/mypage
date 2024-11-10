@@ -7,6 +7,8 @@ export default {
   theme: {
     extend: {},
   },
-  plugins: [],
+  plugins: [
+    require('tailwindcss-tables')(),
+  ],
 }
 // https://stackoverflow.com/questions/66288645/vite-does-not-build-tailwind-based-on-config

@@ -3,51 +3,64 @@ import HelloWorld from './components/HelloWorld.vue'
 </script>
 
 <template>
-  <div style="text-align: left;">
-    <table style="width: 100%; border-spacing: 30px;">
+  <!-- ABOUT ME -->
+  <div class="text-left font-sans">
+    <table class="border">
       <tbody>
         <tr>
-          <td style="vertical-align:top; text-align: centhttps://stackoverflow.com/tagser">
-            <img src="./assets/sandikrivec.webp" style="width:168px;height:168px;object-fit:cover;border-radius: 50%;"
-              width="168" height="168" fetchpriority="high">
-            <h2>Sandi Krivec</h2>
-            <div style="position:relative;width: 60px;height: 3px;border-top:2px solid blue;margin:auto"></div>
-            <p className="underline font-bold" style="letter-spacing:0.25em;font: sans-serif;">Software Engineer</p>
+          <td class="relative align-top text-center text-nowrap">
+            <div style="background: #f4ece6;box-shadow: 0 1px 4px rgba(0, 0, 0, .6);">
+              <div class="p-16">
+                <img src="./assets/sandikrivec.webp" class="w-40 h-40 object-cover rounded-full" fetchpriority="high">
+                <br>
+                <h3>Sandi Krivec</h3>
+                <a href="mailto:sandi.krivec@gmail.com">sandi.krivec@gmail.com</a>
+                <br>
+                <br>
+                <div class="w-20 h-3 border-t-2 border-blue-500 m-auto"></div>
+                <br>
+                <p class="" style="letter-spacing:0.25em">Software Engineer</p>
+              </div>
+              <div class="bg-white w-[100%]">
+                <div class="py-4">
+                  <a class="px-3" href="https://linkedin.com/in/sandi-krivec-28428b65" target="_blank">LinkedIn</a>
+                  <a class="px-3" href="https://github.com/schnapi" target="_blank">GitHub</a>
+                  <a class="px-3" href="https://gitlab.com/sandi.krivec" target="_blank">GitLab</a>
+                </div>
+              </div>
+            </div>
           </td>
-          <td>
+          <td class=" p-16">
             <h1>Hi</h1>
-            <h3>Here's who I am and what I can do for you</h3>
-            Python expert specialized in:
+            <br>
+            <h4>Here's who I am and what I can do for you</h4>
+            <br>
+            <h6>Python expert specialized in:</h6>
             <ul>
-              <li>Software architecture</li>
-              <li>Workflows automation (GitLab CI/CD, Jenkins, Docker)</li>
-              <li>Web (Django, Vue, Bokeh)</li>
-              <li>Android applications</li>
-              <li>CAN communication</li>
+              <li>- Software architecture</li>
+              <li>- Workflows automation (GitLab CI/CD, Jenkins)</li>
+              <li>- Web development (Django, Celery, Vue, Bokeh)</li>
+              <li>- Android development</li>
+              <li>- Databases: SQLite, PostgreSQL, Redis, LMDB</li>
+              <li>- Others: MQTT, WebSockets</li>
             </ul>
-            I use my skills to help businesses optimize their workflows and achieve their goals. Feel free to browse my
-            portfolio and contact me to discuss how I can help you.
+            <br>
+            I use my skills to help businesses optimize their workflows and achieve their goals. Feel free to browse
+            my portfolio and contact me to discuss how I can help you.
           </td>
         </tr>
       </tbody>
     </table>
+
   </div>
-  <HelloWorld msg="Vite + Vue" />
+  <!-- <HelloWorld msg="Vite + Vue" /> -->
 </template>
 
 <style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
+.center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 </style>
