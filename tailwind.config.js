@@ -1,0 +1,12 @@
+/** @type {import('tailwindcss').Config} */
+export default {
+  content: [
+    "./index.html",
+    "./src/**/*.{js,ts,jsx,tsx,vue}",
+  ],
+  theme: {
+    extend: {},
+  },
+  plugins: [],
+}
+// https://stackoverflow.com/questions/66288645/vite-does-not-build-tailwind-based-on-config
