@@ -6,7 +6,7 @@ const ASSET_URL = '';
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: `${ASSET_URL}/dist/`,
+  base: `${ASSET_URL}/mypage/dist/`,
   plugins: [vue()],
   css: {
     postcss: {
