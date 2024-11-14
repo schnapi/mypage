@@ -28,8 +28,6 @@
         </div>
       </div>
       <div class="col-span-1 p-16">
-        <h1>Hi</h1>
-        <br>
         <h4>Here's who I am and what I can do for you</h4>
         <br>
         <h6>Python expert specialized in:</h6>
