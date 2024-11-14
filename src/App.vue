@@ -9,7 +9,7 @@
       <div class="col-span-1 text-center text-nowrap relative bg-[#f4ece6] dark:bg-slate-800"
         style="box-shadow: 0 1px 4px rgba(0, 0, 0, .6);">
         <div class="p-16">
-          <img src="./assets/sandikrivec.webp" class="w-40 h-40 object-cover rounded-full" fetchpriority="high">
+          <img src="./assets/sandikrivec.webp" class="w-40 h-40 object-cover rounded-full m-auto" fetchpriority="high">
           <br>
           <h3>Sandi Krivec</h3>
           <a href="mailto:sandi.krivec@gmail.com">sandi.krivec@gmail.com</a>
@@ -18,6 +18,7 @@
           <div class="w-20 h-3 border-t-2 border-blue-500 m-auto"></div>
           <br>
           <p class="" style="letter-spacing:0.25em">Software Engineer</p>
+          <br>
         </div>
         <div class="bg-white w-[100%] absolute bottom-0">
           <div class="py-4">
