@@ -1,14 +1,59 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/mypage/dist/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + Vue + TS</title>
-    <script type="module" crossorigin src="/mypage/dist/assets/index-CSM19YYn.js"></script>
-    <link rel="stylesheet" crossorigin href="/mypage/dist/assets/index-06vr_l81.css">
-  </head>
-  <body>
-    <div id="app"></div>
-  </body>
+
+<head>
+  <meta charset="UTF-8" />
+  <!-- <link rel="icon" type="image/svg+xml" href="/vite.svg" /> -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About me</title>
+  <script type="module" crossorigin src="/dist/assets/index-W_vXyIFf.js"></script>
+  <link rel="stylesheet" crossorigin href="/dist/assets/index-DRy8qFLU.css">
+</head>
+<script>
+  function toggleDarkMode(theme) {
+    if (!theme) theme = document.documentElement.getAttribute('class') == "dark" ? "light" : "dark"
+    document.documentElement.setAttribute('class', theme);
+    localStorage.theme = theme
+    document.getElementById("toggle").checked = theme == "dark"
+  }
+
+  if (localStorage.theme == "dark" || (!localStorage.theme && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+    localStorage.theme = 'dark'
+  } else localStorage.theme = 'light'
+</script>
+
+<body onload="toggleDarkMode(localStorage.theme)">
+  <div class="text-right">
+    <div class="float-end m-3">
+      <input type="checkbox" class="peer sr-only opacity-0" id="toggle" onclick="toggleDarkMode()" />
+      <label for="toggle"
+        class="relative flex h-6 w-11 cursor-pointer items-center rounded-full bg-gray-400 px-0.5 outline-gray-400 transition-colors before:h-5 before:w-5 before:rounded-full before:bg-white before:shadow before:transition-transform before:duration-300 peer-checked:bg-green-500 peer-checked:before:translate-x-full peer-focus-visible:outline peer-focus-visible:outline-offset-2 peer-focus-visible:outline-gray-400 peer-checked:peer-focus-visible:outline-green-500"
+        for="toggle ">
+        <span class="sr-only">Enable</span>
+        <svg id="lighModeIcon" class="absolute left-[-3px]" transform="scale(0.5)" width="30" height="30"
+          id="light-icon">
+          <circle cx="15" cy="15" r="6" fill="currentColor" />
+          <line id="ray" stroke="currentColor" stroke-width="2" stroke-linecap="round" x1="15" y1="1" x2="15" y2="4">
+          </line>
+          <use href="#ray" transform="rotate(45 15 15)" />
+          <use href="#ray" transform="rotate(90 15 15)" />
+          <use href="#ray" transform="rotate(135 15 15)" />
+          <use href="#ray" transform="rotate(180 15 15)" />
+          <use href="#ray" transform="rotate(225 15 15)" />
+          <use href="#ray" transform="rotate(270 15 15)" />
+          <use href="#ray" transform="rotate(315 15 15)" />
+        </svg>
+        <svg id="darkModeIcon" class="absolute right-[-3px]" transform="scale(0.6)" width="30" height="30"
+          id="dark-icon">
+          <path fill="currentColor" d="
+                  M 23, 5
+                  A 12 12 0 1 0 23, 25
+                  A 12 12 0 0 1 23, 5" />
+        </svg>
+      </label>
+    </div>
+  </div>
+  <div id="app"></div>
+</body>
+
 </html>
