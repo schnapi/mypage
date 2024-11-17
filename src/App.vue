@@ -130,7 +130,7 @@ function filterProjects(event: any) {
           <tr v-if="project.visible != false">
             <td>
               <span>{{ project.value.company }}</span>
-              <div v-if="project.value.dateFrom && project.value.dateTo">
+              <div v-if="project.value.dateFrom || project.value.dateTo">
                 <i>{{ project.value.dateFrom }} - {{ project.value.dateTo
                   }}</i>
               </div>
