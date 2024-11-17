@@ -113,7 +113,7 @@ function filterProjects(event: any) {
         my portfolio and contact me to discuss how I can help you.
       </div>
     </div>
-    <div class="border mt-4 p-4 rounded-lg">
+    <div class="border mt-4 p-4 rounded-lg overflow-auto">
       <h4>Experience</h4>
       <table class="table mt-2">
         <tr>
