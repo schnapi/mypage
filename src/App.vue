@@ -37,7 +37,7 @@ let _projects: Project[] = [{
   TF-IDF.); cross validation for testing quality of classifiers.<br>
   • Feature selection (chi2, mutual information, random forest).`,
 }, {
-  name: "Android/Windows chat application", dateFrom: "Apr 2017", dateTo: "Jun 2017", company: "Biokoda", jobPosition: "Software Developer", link: "",
+  name: "Android/Windows chat application", dateFrom: "May 2017", dateTo: "Jun 2017", company: "Biokoda", jobPosition: "Software Developer", link: "",
   description: `
   • Developing chat application modules for windows mobile devices.`,
 }, {
