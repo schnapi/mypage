@@ -16,7 +16,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from model.api_view import UserCVView, UserApiView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/resume/<user_name>/', UserCVView.as_view()),
+    path('api/resume/', UserApiView.as_view())
 ]

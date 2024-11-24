@@ -1,0 +1,111 @@
+[project]
+    name = "MyPage"
+    authors = [{name = "", email = "sandi.krivec@gmail.com"}]
+    version = "0.1.0"
+    requires-python = ">=3.9.5"
+    dependencies = []
+
+
+[project.optional-dependencies]
+    dev = []
+
+
+[tool.ruff]
+    # Exclude a variety of commonly ignored directories.
+    exclude = [
+        ".bzr", ".direnv", ".eggs", ".git", ".git-rewrite", ".hg", ".ipynb_checkpoints", ".mypy_cache", ".nox",
+        ".pants.d", ".pyenv", ".pytest_cache", ".pytype", ".ruff_cache", ".svn", ".tox", ".venv", 
+        ".vscode",
+        "__pypackages__", "_build", "buck-out", "build", "dist", "node_modules", "site-packages", "venv", "packenv",
+    ]
+    line-length = 200
+    indent-width = 4
+
+[tool.ruff.lint]
+    # Enable Pyflakes (`F`) and a subset of the pycodestyle (`E`)  codes by default.
+    # select = ["E4", "E7", "E9", "F"]
+    ignore = ["E261", "E262", "E266", "E401", "E402", "E501", "E711", "E712", "E722", "F541", "F821", "W291", "E999"]
+    # Allow fix for all enabled rules (when `--fix`) is provided.
+    # fixable = ["ALL"]
+    # unfixable = []
+    # Allow unused variables when underscore-prefixed.
+    dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+    # extend-select = ["I"]
+
+
+[tool.ruff.format]
+    # quote-style = "double"
+    indent-style = "space"
+    skip-magic-trailing-comma = true
+    line-ending = "auto"
+
+[tool.ruff.lint.isort]
+    split-on-trailing-comma = false
+
+[tool.pytest.ini_options]
+    pythonpath = ["backend"]
+    DJANGO_SETTINGS_MODULE = "settings"
+    testpaths = [
+        "tests"
+    ]
+
+# [tool.pyright]
+#     # include = ["src"]
+#     exclude = ["**/node_modules", "**/__pycache__", ".pytest_cache", ".git", ".vscode", 
+#         ".ruff_cache", "packenv",
+#     ]
+#     # ignore = ["src/oldstuff"]
+#     defineConstant = { DEBUG = true }
+#     stubPath = "tests/typings"
+
+#     typeCheckingMode = "strict"
+
+#     reportImportCycles = "none" # enable for debuging
+#     reportIncompatibleMethodOverride = "none" # enable for debuging
+#     reportIncompatibleVariableOverride = "none" # enable for debuging
+#     reportUnnecessaryTypeIgnoreComment = "information"
+#     # others
+#     reportIncompleteStub = "none" # enable for debuging
+#     reportInconsistentConstructor = "none" # enable for debuging
+#     reportInvalidStubStatement = "none" # enable for debuging
+#     reportMatchNotExhaustive = "none" # enable for debuging
+#     reportOverlappingOverload = "none" # enable for debuging
+#     reportUnnecessaryCast = "none" # enable for debuging
+#     reportUnnecessaryComparison = "none" # enable for debuging
+#     reportUnnecessaryContains = "none" # enable for debuging
+#     reportPrivateUsage = "none" # enable for debuging
+#     reportMissingTypeStubs = "none" # enable for debuging
+#     reportConstantRedefinition = "none"
+#     reportFunctionMemberAccess = "none"
+#     reportMissingParameterType = "none"
+#     reportMissingTypeArgument = "none"
+#     reportShadowedImports = "error"
+#     reportTypeCommentUsage = "none"
+#     reportUnknownArgumentType = "none"
+#     reportUnknownLambdaType = "none"
+#     reportUnknownMemberType = "none"
+#     reportUnknownParameterType = "none"
+#     reportUnknownVariableType = "none"
+#     reportUnnecessaryIsInstance = "none"
+#     reportUnusedClass = "none"
+#     reportUnusedFunction = "none"
+#     reportUnusedVariable = "warning"
+#     reportUntypedBaseClass = "none"
+#     reportUntypedClassDecorator = "none"
+#     reportUntypedFunctionDecorator = "none"
+#     reportUntypedNamedTuple = "none"
+#     reportImplicitStringConcatenation = "warning"
+#     reportPropertyTypeMismatch = "error"
+#     reportArgumentType = "none"
+#     # reportCallInDefaultInitializer = "error"
+#     # reportMissingSuperCall = "error"
+#     # strictListInference = "true"
+
+#     # pythonVersion = "3.11"
+
+#     # executionEnvironments = [
+#     #     { root = "src/web", pythonVersion = "3.5", pythonPlatform = "Windows", extraPaths = [ "src/service_libs" ] },
+#     #     { root = "src/sdk", pythonVersion = "3.0", extraPaths = [ "src/backend" ] },
+#     #     { root = "src/tests", extraPaths = ["src/tests/e2e", "src/sdk" ]},
+#     #     { root = "src" }
+#     # ]
