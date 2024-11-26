@@ -5,6 +5,8 @@ import PrimeVue from 'primevue/config';
 import Aura from '@primevue/themes/aura';
 import { clickOutside } from './directives';
 
+import 'primeicons/primeicons.css'
+
 const app = createApp(App)
 app.use(PrimeVue, {
     theme: {

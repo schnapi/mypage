@@ -1,26 +1,28 @@
 from django.conf import settings
-from django.db import models  #, transaction
+from django.db import models  # , transaction
 from django.utils import timezone
 from django.contrib.auth.models import User
+
 
 class Company(models.Model):
     name = models.CharField(max_length=100, null=True)
 
+
 class Project(models.Model):
     name = models.CharField(max_length=100)
-    position = models.CharField(max_length=100)
+    job_position = models.CharField(max_length=100)
     description = models.TextField(blank=True, null=True)
     url = models.TextField(blank=True, null=True)
-    datetime_start = models.DateTimeField(null=True)
-    datetime_end = models.DateTimeField(null=True)
-    
+    date_start = models.DateField(null=True)
+    date_end = models.DateField(null=True)
+
+
 class UserExperience(models.Model):
     company = models.ForeignKey(Company, on_delete=models.PROTECT)
     project = models.ForeignKey(Project, on_delete=models.PROTECT)
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
 
-    
 
 class TimeStampedModel(models.Model):
     creation_date = models.DateTimeField(editable=False, default=timezone.now)

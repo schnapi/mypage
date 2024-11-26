@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@primevue/themes": "^4.2.2",
+    "moment": "^2.30.1",
     "primeicons": "^7.0.0",
     "primevue": "^4.2.2",
     "tailwindcss-tables": "^0.4.0",

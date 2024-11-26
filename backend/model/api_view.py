@@ -2,6 +2,7 @@ from rest_framework.request import Request
 from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.decorators import api_view
 from django.contrib.auth.models import User
 
 from .serializers import UserExperienceSerializer
@@ -12,12 +13,16 @@ from table_utils import StandardResultsSetPagination, SortField
 # from rest_framework.permissions import IsAuthenticated
 
 
+@api_view(["GET"])
+def base(request):
+    return Response()
+
+
 class UserCVView(APIView):
     # authentication_classes = [SessionAuthentication, TokenAuthentication]
     # permission_classes = [IsAuthenticated]
 
     def get(self, request: "Request", user_name: str, format=None):
-        
         data = dict(test=1)
         return Response(data)
 
@@ -26,32 +31,32 @@ class UserApiView(generics.ListCreateAPIView):
     queryset = UserExperience.objects.all()
     serializer_class = UserExperienceSerializer
     pagination_class = StandardResultsSetPagination
-    default_sort_field = SortField("project__datetime_start", sort_dir=SortField.SORT_DIR_DESC)
+    default_sort_field = SortField("project__date_start", sort_dir=SortField.SORT_DIR_DESC)
 
     class Params:
         q_sort_by = "qSortBy"  # query string param name for the field
         q_sort_dir = "qSortDir"  # query string param name for sort direction (ascending/descending)
 
     def list(self, request, *args, **kwargs):
-        res = super().list(request, *args, **kwargs)
-        return res
-        
+        response = super().list(request, *args, **kwargs)
+        return response
+
     def create(self, request, *args, **kwargs):
         data = request.data
-        company = Company.objects.get_or_create(name=data["company"]["name"])
+        company = Company.objects.get_or_create(**data["company"])
         proj_dict = data["project"]
-        project = Project.objects.get_or_create(name=proj_dict["name"], position=proj_dict["position"], description=proj_dict["description"], url=proj_dict["url"], datetime_start=proj_dict["datetime_start"], datetime_end=proj_dict["datetime_end"])
+        project = Project.objects.get_or_create(**proj_dict)
         user = User.objects.get(username="sandi")
         UserExperience.objects.get_or_create(user=user, company=company[0], project=project[0])
         return Response()
-        
+
     def get_queryset(self):
         queryset = super().get_queryset()
         ordering = self.get_ordering()
         if ordering:
             return queryset.order_by(ordering)
         return queryset
-    
+
     def get_ordering(self):
         sf = self.default_sort_field
         if sf:
