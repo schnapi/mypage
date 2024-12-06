@@ -81,7 +81,7 @@ default_data = [
         "date_end": "",
         "company": "Private project",
         "job_position": "",
-        "url": "https://drive.google.com/file/d/14gf54BNR7zHN1WTFPdAo2j7cFoXOA18m/view?usp=drivesdk",
+        "url": "",
         "description": """• Implemented API for crypto in Dart programming language.""",
     },
 ]
@@ -93,4 +93,4 @@ for it in default_data:
 
     it["date_start"] = datetime.strptime(it["date_start"], "%b %Y").date().isoformat() if it["date_start"] else None
     it["date_end"] = datetime.strptime(it["date_end"], "%b %Y").date().isoformat() if it["date_end"] else None
-    response = requests.post("https://localhost:8000/api/resume/", json={"company": dict(name=company), "project": it})
+    response = requests.post("http://localhost:8000/api/resume/", json={"company": dict(name=company), "project": it})

@@ -47,7 +47,7 @@ export function get(url: string, onSuccessCallback?: (response: ResponseWithData
         method: "GET",
         headers: Object.assign({}, headers, {
             // Accept: 'application/json',
-            Authorization: 'Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL2Nsb3VkLmdvb2dsZS5jb20vd29ya3N0YXRpb25zIiwiYXVkIjoiaWR4LXNhbmRpa3JpdmVjLTE3MzExODQ2Mjc3MjcuY2x1c3Rlci1yY3loZWV0eW1uZ3Q0cXg1ZnBzd3VhM3J5NC5jbG91ZHdvcmtzdGF0aW9ucy5kZXYiLCJpYXQiOjE3MzI2NDg2NzYsImV4cCI6MTczMjczNTA3NX0.N7HBm_OHMeBgYUOz2Ye7GXTHEMCi6R5AuiW9xknldLqiChcqPxfwyiwzEgBTcy0-_QfGWDyrjN1vZaT-tVgqJhAKZq1R-br7OBuAFqJQnCiFGdUZN_WQz0g-0iAuw-cxuoxTlrb3kRTywESguLlQqfGH3h_uQHlF4xsK00Or0Sjm7ZgDx6p8qa2pgBh-DKWbj4Td_cE8OWU9824U41GRJY1VV56rdhsgU61cUiwmyxz2KYSxBFCkXKsNkS0KRYVfVSQfZZ4bYOSxW2QGPiq8jNzfoFZbpfwapibwDlBHhcAvLNbO0gxGK3wJiNIFC0AMeh3LeYIuauEmwqxwD9wgdw',
+            // Authorization: 'Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL2Nsb3VkLmdvb2dsZS5jb20vd29ya3N0YXRpb25zIiwiYXVkIjoiaWR4LXNhbmRpa3JpdmVjLTE3MzExODQ2Mjc3MjcuY2x1c3Rlci1yY3loZWV0eW1uZ3Q0cXg1ZnBzd3VhM3J5NC5jbG91ZHdvcmtzdGF0aW9ucy5kZXYiLCJpYXQiOjE3MzI2NDg2NzYsImV4cCI6MTczMjczNTA3NX0.N7HBm_OHMeBgYUOz2Ye7GXTHEMCi6R5AuiW9xknldLqiChcqPxfwyiwzEgBTcy0-_QfGWDyrjN1vZaT-tVgqJhAKZq1R-br7OBuAFqJQnCiFGdUZN_WQz0g-0iAuw-cxuoxTlrb3kRTywESguLlQqfGH3h_uQHlF4xsK00Or0Sjm7ZgDx6p8qa2pgBh-DKWbj4Td_cE8OWU9824U41GRJY1VV56rdhsgU61cUiwmyxz2KYSxBFCkXKsNkS0KRYVfVSQfZZ4bYOSxW2QGPiq8jNzfoFZbpfwapibwDlBHhcAvLNbO0gxGK3wJiNIFC0AMeh3LeYIuauEmwqxwD9wgdw',
         }),
         // headers: Object.assign({}, { "X-CSRFToken": getCSRFToken() }, headers),
         // body: ""

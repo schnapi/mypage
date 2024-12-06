@@ -1,61 +1,81 @@
 <script setup lang="ts">
 // import HelloWorld from './components/HelloWorld.vue'
 // import { sunIcon } from './icons'
-import { reactive } from 'vue'
+import { reactive, ref, computed } from 'vue'
 // import { ref, reactive, nextTick, PropType, onMounted, Ref, watchEffect } from 'vue'
 import MultiSelect from 'primevue/multiselect';
+import DataTable from 'primevue/datatable';
+import Column from 'primevue/column';
+import { FilterMatchMode } from '@primevue/core/api';
+import IconField from 'primevue/iconfield';
+import InputIcon from 'primevue/inputicon';
+import InputText from 'primevue/inputtext';
 
 import Modal from './Modal.vue'
 import { Project, ProjectLabel } from './interfaces'
 import * as Api from "./api"
 import * as Utils from "./utils"
 
-
 // TODO
 // add sorting in table by different filter
 // add database, dockergitlab
 let modal = reactive({ text: "", title: "", visible: false })
-let selectedProjects: any = []
+// let selectedProjects: any = []
 let url = ""
 
-let _projects: Project[] = []
-let projects: ProjectLabel[] = reactive([])
+let projects: Project[] = reactive([])
+let loadingData = ref("loading...")
+
+// let TAGS_FILTER = ref("TAG_FILTER")
+// FilterService.register(TAGS_FILTER.value, (value, filter): boolean => {
+//   console.log(value, filter);
+//   if (filter.length == 0) return true;
+//   for (let el of filter) {
+//     if (el.project.job_position == value) {
+//       return true;
+//     }
+//   }
+//   return false;
+// });
+const filters = ref({
+  global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+  'project.name': { value: '', matchMode: FilterMatchMode.CONTAINS },
+  'project.job_position': { value: null, matchMode: FilterMatchMode.IN },
+  // 'project.job_position': { value: null, matchMode: TAGS_FILTER.value }
+});
+
 
 Api.get(`${url}/api/resume/`, response => {
-  _projects = response.data.results
-  projects.push(..._projects.map(it => ({ value: it, label: it.project.name })))
-  //   {
-  //     "value": {
-  //         "id": 1,
-  //         "company": {
-  //             "id": 1,
-  //             "name": "Magna PowerTrain"
-  //         },
-  //         "project": {
-  //             "id": 1,
-  //             "name": "Python Testing Framework",
-  //             "job_position": "Python Engineer",
-  //             "description": "\n                    • Architecture and implementation of state of the art Python Framework for generating\n                    and executing test cases on Testbeds, HIL's and custom virtual environment.<br>\n                    • Jenkins and Gitlab CI pipelines for checking code quality, unit tests, reports creation.<br>\n                    • Django backend, Vue front-end for tracking and managing test results with WebSockets.<br>\n                    • Architecture of database for storing results.<br>\n                    • Code reviews.",
-  //             "url": "",
-  //             "date_start": "2021-10-01",
-  //             "date_end": null
-  //         },
-  //         "user": {
-  //             "username": "sandi"
+  loadingData.value = ""
+  projects.push(...response.data.results)
+  projects.forEach((it: any) => {
+    it.project.date_start_display = Utils.formatDatetime(it.project.date_start, "MMM YYYY")
+    it.project.date_end_display = Utils.formatDatetime(it.project.date_end, "MMM YYYY")
+  })
 }, error => {
+  loadingData.value = `<span class="text-red-500">${error}</span>`
 }, undefined, {
 })
-function filterProjects(event: any) {
-  let selection = event.value.map((it: any) => it.value.project.name)
-  console.log(selection)
-  projects.forEach((project: any) => {
-    if (selection.length == 0 || selection.includes(project.value.project.name)) {
-      project.visible = true
-    } else {
-      project.visible = false
-    }
-  })
+// function filterProjects(event: any) {
+//   let selection = event.value.map((it: any) => it.value.project.name)
+//   console.log(selection)
+//   projects.forEach((project: any) => {
+//     if (selection.length == 0 || selection.includes(project.value.project.name)) {
+//       project.visible = true
+//     } else {
+//       project.visible = false
+//     }
+//   })
+// }
+function showDescription(value: Project) {
+  modal.visible = true
+  modal.text = value.project.description
+  modal.title = value.project.name
 }
+
+const jobPositions = computed(() => {
+  return [...new Set(projects.map(it => it.project.job_position))]
+})
 </script>
 
 <template>
@@ -106,9 +126,68 @@ function filterProjects(event: any) {
         my portfolio and contact me to discuss how I can help you.
       </div>
     </div>
-    <div class="border mt-4 p-4 rounded-lg overflow-auto">
+    <br>
+    <DataTable removableSort v-model:filters="filters" :value="projects" dataKey="id" filterDisplay="row"
+      :globalFilterFields="['company.name', 'project.date_start_display', 'project.date_end_display', 'project.job_position', 'project.name']"
+      class="border mt-4 p-4 rounded-lg overflow-auto">
+      <template #header>
+        <h4>Experience</h4>
+        <div class="flex justify-end">
+          <IconField>
+            <InputIcon>
+              <i class="pi pi-search" />
+            </InputIcon>
+            <InputText v-model="filters['global'].value" placeholder="Keyword Search" />
+          </IconField>
+        </div>
+      </template>
+      <template #empty> No customers found. </template>
+      <template #loading> Loading customers data. Please wait. </template>
+      <Column field="company.name" sortable header="Company">
+      </Column>
+      <Column header="Date start/end">
+        <template #body="{ data }">
+          <template v-if="data.project.date_start || data.project.date_end">
+            {{ data.project.date_start_display }} - {{ data.project.date_end_display }}
+          </template>
+        </template>
+      </Column>
+      <Column field="project.job_position" sortable header="Position" filterField="project.job_position"
+        :showFilterMenu="true" :showFilterMatchModes="false">
+        <template #filter="{ filterModel, filterCallback }">
+          <MultiSelect v-model="filterModel.value" @change="filterCallback()" :options="jobPositions" optionLabel=""
+            placeholder="Any" style="min-width: 14rem" :maxSelectedLabels="1">
+            <!-- <template #option="slotProps">
+              <div class="flex items-center gap-2">
+                <span>{{ slotProps.option.label }}</span>
+              </div>
+            </template> -->
+          </MultiSelect>
+        </template>
+      </Column>
+      <Column field="project.name" sortable header="Project name">
+        <template #body="{ data }">
+          {{ data.project.name }}
+        </template>
+        <template #filter="{ filterModel, filterCallback }">
+          <InputText v-model="filterModel.value" type="text" @input="filterCallback()" placeholder="Search by name" />
+        </template>
+      </Column>
+      <Column header="Description">
+        <template #body="{ data }">
+          <a class="text-sm cursor-pointer" @click="showDescription(data)">Show More</a>
+        </template>
+      </Column>
+      <Column header="Link">
+        <template #body="{ data }">
+          <a target="_blank" v-if="data.project.url" :href="data.project.url" class="text-sm">Link</a>
+        </template>
+      </Column>
+    </DataTable>
+    <!-- <div class="border mt-4 p-4 rounded-lg overflow-auto">
       <h4>Experience</h4>
-      <table class="table mt-2">
+      <div class="p-3" v-if="loadingData != ''" v-html="loadingData"></div>
+      <table v-else class=" table mt-2">
         <tbody>
           <tr>
             <th>Company</th>
@@ -123,21 +202,20 @@ function filterProjects(event: any) {
           <template v-for="project in projects">
             <tr v-if="project.visible != false">
               <td>
-                <span>{{ project.value.company.name }}</span>
-                <div v-if="project.value.project.date_start || project.value.project.date_end">
-                  <i>{{ Utils.formatDatetime(project.value.project.date_start, "MMM YYYY") }} - {{
-                    Utils.formatDatetime(project.value.project.date_end, "MMM YYYY")
+                <span>{{ project.company.name }}</span>
+                <div v-if="project.project.date_start || project.project.date_end">
+                  <i>{{ Utils.formatDatetime(project.project.date_start, "MMM YYYY") }} - {{
+                    Utils.formatDatetime(project.project.date_end, "MMM YYYY")
                   }}</i>
                 </div>
-
               </td>
-              <td>{{ project.value.project.job_position }}</td>
-              <td>{{ project.value.project.name }}</td>
+              <td>{{ project.project.job_position }}</td>
+              <td>{{ project.project.name }}</td>
               <td><a class="text-sm cursor-pointer"
-                  @click="modal.visible = true; modal.text = project.value.project.description; modal.title = project.value.project.name;">Show
+                  @click="modal.visible = true; modal.text = project.project.description; modal.title = project.project.name;">Show
                   More</a></td>
-              <td><a target="_blank" v-if="project.value.project.url" :href="project.value.project.url"
-                  class="text-sm">Link</a></td>
+              <td><a target="_blank" v-if="project.project.url" :href="project.project.url" class="text-sm">Link</a>
+              </td>
             </tr>
           </template>
           <tr>
@@ -146,7 +224,7 @@ function filterProjects(event: any) {
         </tbody>
       </table>
 
-    </div>
+    </div> -->
   </div>
   <!-- <HelloWorld msg="Vite + Vue" /> -->
 </template>

@@ -50,6 +50,16 @@ h6 {
   --link-white-color: #c1bfbd;
   --bg-color: #242424;
   --btn-bg-color: #1a1a1a;
+  --table-border-color: #555;
+  /* --p-datatable-border-color: white;
+  --p-datatable-row-striped-background: white;
+  --p-datatable-body-cell-selected-border-color: white; */
+  --p-datatable-header-background: var(--bg-color) !important;
+  --p-datatable-header-cell-background: var(--bg-color) !important;
+  --p-datatable-row-background: var(--bg-color) !important;
+  /* --p-datatable-row-color: white !important; */
+  --p-datatable-body-cell-border-color: var(--table-border-color) !important;
+  --p-datatable-header-cell-border-color: var(--table-border-color) !important
 }
 
 :root {
