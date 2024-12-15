@@ -1,7 +1,6 @@
 <script setup lang="ts">
-// import HelloWorld from './components/HelloWorld.vue'
 // import { sunIcon } from './icons'
-import { reactive, ref, computed } from 'vue'
+import { reactive, ref, computed, Ref, onMounted } from 'vue'
 // import { ref, reactive, nextTick, PropType, onMounted, Ref, watchEffect } from 'vue'
 import MultiSelect from 'primevue/multiselect';
 import DataTable from 'primevue/datatable';
@@ -10,21 +9,17 @@ import { FilterMatchMode } from '@primevue/core/api';
 import IconField from 'primevue/iconfield';
 import InputIcon from 'primevue/inputicon';
 import InputText from 'primevue/inputtext';
+import Dialog from 'primevue/dialog';
 
-import Modal from './Modal.vue'
-import { Project, ProjectLabel } from './interfaces'
+import { Project } from './interfaces'
 import * as Api from "./api"
 import * as Utils from "./utils"
 
-// TODO
-// add sorting in table by different filter
-// add database, dockergitlab
 let modal = reactive({ text: "", title: "", visible: false })
-// let selectedProjects: any = []
 let url = ""
 
 let projects: Project[] = reactive([])
-let loadingData = ref("loading...")
+let loadingData: Ref<string | null> = ref(null)
 
 // let TAGS_FILTER = ref("TAG_FILTER")
 // FilterService.register(TAGS_FILTER.value, (value, filter): boolean => {
@@ -44,17 +39,23 @@ const filters = ref({
   // 'project.job_position': { value: null, matchMode: TAGS_FILTER.value }
 });
 
-
-Api.get(`${url}/api/resume/`, response => {
-  loadingData.value = ""
-  projects.push(...response.data.results)
-  projects.forEach((it: any) => {
-    it.project.date_start_display = Utils.formatDatetime(it.project.date_start, "MMM YYYY")
-    it.project.date_end_display = Utils.formatDatetime(it.project.date_end, "MMM YYYY")
+function getResumeData() {
+  loadingData.value = null
+  Api.get(`${url}/api/resume/`, response => {
+    loadingData.value = ""
+    projects.push(...response.data.results)
+    projects.forEach((it: any) => {
+      it.project.date_start_display = Utils.formatDatetime(it.project.date_start, "MMM YYYY")
+      it.project.date_end_display = Utils.formatDatetime(it.project.date_end, "MMM YYYY")
+    })
+  }, error => {
+    loadingData.value = `<span class="text-red-500">${error}</span>`
+  }, undefined, {
   })
-}, error => {
-  loadingData.value = `<span class="text-red-500">${error}</span>`
-}, undefined, {
+}
+
+onMounted(() => {
+  getResumeData()
 })
 // function filterProjects(event: any) {
 //   let selection = event.value.map((it: any) => it.value.project.name)
@@ -67,15 +68,24 @@ Api.get(`${url}/api/resume/`, response => {
 //     }
 //   })
 // }
-function showDescription(value: Project) {
+function showDescription(event: Event, value: Project) {
   modal.visible = true
   modal.text = value.project.description
   modal.title = value.project.name
+  event.stopPropagation()
 }
 
 const jobPositions = computed(() => {
   return [...new Set(projects.map(it => it.project.job_position))]
 })
+
+function clickOutside(el: any) {
+  if (!modal.visible) return
+  // if (el.srcElement.classList.includes("showDescription")) return
+  if (el.srcElement.closest("#myDialog") != null) return
+  // console.info(el)
+  modal.visible = false
+}
 </script>
 
 <template>
@@ -85,7 +95,15 @@ const jobPositions = computed(() => {
   <span class="pi pi-user"></span>
   <!-- ABOUT ME -->
   <div class="text-left font-sans text-black dark:text-white">
-    <Modal :modal="modal"></Modal>
+    <Dialog v-model:visible="modal.visible" modal id="myDialog">
+      <template #header>
+        <h4 class="cursor-grab">{{ modal.title }}</h4>
+      </template>
+      <div v-html="modal.text" v-click-outside="clickOutside"></div>
+      <!-- <template #footer> -->
+      <!-- <Button label="Close" text severity="secondary" @click="modal.visible = false" autofocus /> -->
+      <!-- </template> -->
+    </Dialog>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-0 border rounded-lg w-full">
       <div class="col-span-1 text-center text-nowrap relative bg-[#f4ece6] dark:bg-slate-800  rounded-lg"
         style="box-shadow: 0 1px 4px rgba(0, 0, 0, .6);">
@@ -127,7 +145,8 @@ const jobPositions = computed(() => {
       </div>
     </div>
     <br>
-    <DataTable removableSort v-model:filters="filters" :value="projects" dataKey="id" filterDisplay="row"
+    <DataTable paginator :rows="10" :rowsPerPageOptions="[5, 10, 20, 50]" removableSort v-model:filters="filters"
+      :value="projects" dataKey="id" filterDisplay="row" :loading="loadingData === null"
       :globalFilterFields="['company.name', 'project.date_start_display', 'project.date_end_display', 'project.job_position', 'project.name']"
       class="border mt-4 p-4 rounded-lg overflow-auto">
       <template #header>
@@ -141,11 +160,13 @@ const jobPositions = computed(() => {
           </IconField>
         </div>
       </template>
-      <template #empty> No customers found. </template>
-      <template #loading> Loading customers data. Please wait. </template>
+      <template #empty>
+        <span v-html="loadingData"></span>
+      </template>
+      <template #loading> Loading data. Please wait. </template>
       <Column field="company.name" sortable header="Company">
       </Column>
-      <Column header="Date start/end">
+      <Column field="project.date_start" sortable header="Date start/end">
         <template #body="{ data }">
           <template v-if="data.project.date_start || data.project.date_end">
             {{ data.project.date_start_display }} - {{ data.project.date_end_display }}
@@ -175,7 +196,7 @@ const jobPositions = computed(() => {
       </Column>
       <Column header="Description">
         <template #body="{ data }">
-          <a class="text-sm cursor-pointer" @click="showDescription(data)">Show More</a>
+          <a class="text-sm cursor-pointer" @click="showDescription($event, data)">Show More</a>
         </template>
       </Column>
       <Column header="Link">
@@ -223,10 +244,8 @@ const jobPositions = computed(() => {
           </tr>
         </tbody>
       </table>
-
     </div> -->
   </div>
-  <!-- <HelloWorld msg="Vite + Vue" /> -->
 </template>
 
 <style scoped>

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { PropType, ref } from 'vue'
-import { Modal } from './interfaces';
+import { Modal } from '../interfaces';
 
 const props = defineProps({
     modal: { type: Object as PropType<Modal>, required: true },
