@@ -10,17 +10,37 @@ import IconField from 'primevue/iconfield';
 import InputIcon from 'primevue/inputicon';
 import InputText from 'primevue/inputtext';
 import Dialog from 'primevue/dialog';
+import Chart from 'primevue/chart';
 
 import { Project } from './interfaces'
 import * as Api from "./api"
 import * as Utils from "./utils"
+import moment from 'moment';
 
 let modal = reactive({ text: "", title: "", visible: false })
 let url = ""
-
 let projects: Project[] = reactive([])
 let loadingData: Ref<string | null> = ref(null)
+const chartData = ref();
+// const chartOptions = ref();
 
+const setChartData = (x: string[], y: number[]) => {
+  console.log(y)
+  let yFiltered = y.filter(it => !Number.isNaN(it))
+  let sumY = yFiltered.reduce((partialSum: number, a: number) => partialSum + a, 0);
+  return {
+    labels: x,
+    datasets: [
+      {
+        label: `Experience ${sumY}`,
+        data: y,
+        backgroundColor: ['rgba(249, 115, 22, 0.2)', 'rgba(6, 182, 212, 0.2)', 'rgb(107, 114, 128, 0.2)', 'rgba(139, 92, 246 0.2)'],
+        borderColor: ['rgb(249, 115, 22)', 'rgb(6, 182, 212)', 'rgb(107, 114, 128)', 'rgb(139, 92, 246)'],
+        borderWidth: 1
+      }
+    ]
+  };
+};
 // let TAGS_FILTER = ref("TAG_FILTER")
 // FilterService.register(TAGS_FILTER.value, (value, filter): boolean => {
 //   console.log(value, filter);
@@ -48,6 +68,12 @@ function getResumeData() {
       it.project.date_start_display = Utils.formatDatetime(it.project.date_start, "MMM YYYY")
       it.project.date_end_display = Utils.formatDatetime(it.project.date_end, "MMM YYYY")
     })
+    console.log(projects)
+    let projectReverse = [...projects].reverse()
+    let companies = projectReverse.map(it => it.company.name)
+    let experienceYears = projectReverse.map(it => moment.duration(moment(it.project.date_end || moment.now()).diff(moment(it.project.date_start))).asYears())
+    chartData.value = setChartData(companies, experienceYears);
+
   }, error => {
     loadingData.value = `<span class="text-red-500">${error}</span>`
   }, undefined, {
@@ -205,6 +231,10 @@ function clickOutside(el: any) {
         </template>
       </Column>
     </DataTable>
+    <br>
+    <h4>Experience diagram</h4>
+    <Chart type="bar" :data="chartData" />
+    <!-- :options="chartOptions" /> -->
     <!-- <div class="border mt-4 p-4 rounded-lg overflow-auto">
       <h4>Experience</h4>
       <div class="p-3" v-if="loadingData != ''" v-html="loadingData"></div>
