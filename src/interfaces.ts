@@ -23,6 +23,8 @@ export interface ProjectData {
     date_start: string
     date_end: string
     job_position: string
+    date_start_display: string
+    date_end_display: string
 }
 export interface Project {
     project: ProjectData

@@ -61,13 +61,34 @@ const filters = ref({
 
 function getResumeData() {
   loadingData.value = null
-  Api.get(`${url}/api/resume/`, response => {
+  let urlResumeData = "https://wrgkftq7z7.execute-api.eu-central-1.amazonaws.com/default/myFunctionName?TableName=UserExperience"
+  let sql = false
+  // urlResumeData = `${url}/api/resume/`
+  Api.get(urlResumeData, response => {
     loadingData.value = ""
-    projects.push(...response.data.results)
-    projects.forEach((it: any) => {
-      it.project.date_start_display = Utils.formatDatetime(it.project.date_start, "MMM YYYY")
-      it.project.date_end_display = Utils.formatDatetime(it.project.date_end, "MMM YYYY")
-    })
+    if (sql) {
+      projects.push(...response.data.results)
+      projects.forEach((it: any) => {
+        it.project.date_start_display = Utils.formatDatetime(it.project.date_start, "MMM YYYY")
+        it.project.date_end_display = Utils.formatDatetime(it.project.date_end, "MMM YYYY")
+      })
+    } else {
+      response.data.Items.forEach((it: any) => {
+        let p: Project = {
+          project: {
+            name: it.Project.S,
+            description: it.Description.S,
+            url: it.Url.S,
+            date_start: it.DateStart.S,
+            date_end: it.DateEnd.S,
+            date_start_display: Utils.formatDatetime(it.DateStart.S, "MMM YYYY"),
+            date_end_display: Utils.formatDatetime(it.DateEnd.S, "MMM YYYY"),
+            job_position: it.JobPosition.S,
+          }, company: { name: it.Company.S }
+        }
+        projects.push(p)
+      });
+    }
     console.log(projects)
     let projectReverse = [...projects].reverse()
     let companies = projectReverse.map(it => it.company.name)
@@ -115,17 +136,17 @@ function clickOutside(el: any) {
 </script>
 
 <template>
-  <i class="pi pi-angle-up"></i>
+  <!-- <i class="pi pi-angle-up"></i>
   <i class="pi pi-angle-down"></i>
   <span class="pi pi-search"></span>
-  <span class="pi pi-user"></span>
+  <span class="pi pi-user"></span> -->
   <!-- ABOUT ME -->
   <div class="text-left font-sans text-black dark:text-white">
     <Dialog v-model:visible="modal.visible" modal id="myDialog">
       <template #header>
         <h4 class="cursor-grab">{{ modal.title }}</h4>
       </template>
-      <div v-html="modal.text" v-click-outside="clickOutside"></div>
+      <div style="white-space: pre-line" v-html="modal.text" v-click-outside="clickOutside"></div>
       <!-- <template #footer> -->
       <!-- <Button label="Close" text severity="secondary" @click="modal.visible = false" autofocus /> -->
       <!-- </template> -->
