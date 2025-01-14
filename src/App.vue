@@ -18,21 +18,21 @@ import * as Utils from "./utils"
 import moment from 'moment';
 
 let modal = reactive({ text: "", title: "", visible: false })
-let url = ""
 let projects: Project[] = reactive([])
 let loadingData: Ref<string | null> = ref(null)
 const chartData = ref();
+let sumExperience: String | null = null
 // const chartOptions = ref();
 
 const setChartData = (x: string[], y: number[]) => {
   console.log(y)
   let yFiltered = y.filter(it => !Number.isNaN(it))
-  let sumY = yFiltered.reduce((partialSum: number, a: number) => partialSum + a, 0);
+  sumExperience = yFiltered.reduce((partialSum: number, a: number) => partialSum + a, 0).toPrecision(2);
   return {
     labels: x,
     datasets: [
       {
-        label: `Experience ${sumY}`,
+        label: `Experience`,
         data: y,
         backgroundColor: ['rgba(249, 115, 22, 0.2)', 'rgba(6, 182, 212, 0.2)', 'rgb(107, 114, 128, 0.2)', 'rgba(139, 92, 246 0.2)'],
         borderColor: ['rgb(249, 115, 22)', 'rgb(6, 182, 212)', 'rgb(107, 114, 128)', 'rgb(139, 92, 246)'],
@@ -63,7 +63,7 @@ function getResumeData() {
   loadingData.value = null
   let urlResumeData = "https://wrgkftq7z7.execute-api.eu-central-1.amazonaws.com/default/myFunctionName?TableName=UserExperience"
   let sql = false
-  // urlResumeData = `${url}/api/resume/`
+  // urlResumeData = `/api/resume/`
   Api.get(urlResumeData, response => {
     loadingData.value = ""
     if (sql) {
@@ -180,11 +180,11 @@ function clickOutside(el: any) {
         <h6>Python expert specialized in:</h6>
         <ul>
           <li>- Software architecture</li>
-          <li>- Workflows automation (GitLab CI/CD, Jenkins)</li>
-          <li>- Web development (Django, Celery, Vue, Bokeh)</li>
+          <li>- Workflows automation (GitLab CI/CD, GitHub, Jenkins)</li>
+          <li>- Web development (Django, Celery, Vue, Bokeh, Bootstrap, Tailwind)</li>
           <li>- Android development</li>
-          <li>- Databases: SQLite, PostgreSQL, Redis, LMDB</li>
-          <li>- Others: MQTT, WebSockets, Docker, CSS, HTML</li>
+          <li>- Databases: SQLite, PostgreSQL, Redis, LMDB, DynamoDB</li>
+          <li>- Others: AWS, MQTT, WebSockets, Docker, CSS, HTML</li>
         </ul>
         <br>
         I use my skills to help businesses optimize their workflows and achieve their goals. Feel free to browse
@@ -253,7 +253,7 @@ function clickOutside(el: any) {
       </Column>
     </DataTable>
     <br>
-    <h4>Experience diagram</h4>
+    <h4>Experience <i class="">{{ sumExperience }} years</i> </h4>
     <Chart type="bar" :data="chartData" />
     <!-- :options="chartOptions" /> -->
     <!-- <div class="border mt-4 p-4 rounded-lg overflow-auto">

@@ -26,9 +26,7 @@ function clickOutside(el: any) {
             <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
                 <div class="relative transform overflow-hidden rounded-lg bg-white text-black text-left shadow-xl transition-all sm:my-8 sm:w-full 
                     sm:max-w-lg"> <!-- TODO -->
-
                     <div style="box-shadow: 0 1px 4px rgba(0, 0, 0, .6);" class="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4"
-                       
                         v-click-outside="clickOutside">
                         <h4 class="mb-4">{{ props.modal.title }}</h4>
                         <div v-html="props.modal.text"></div>
